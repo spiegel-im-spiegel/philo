@@ -1,21 +1,27 @@
-package main
+package ecode
 
-import (
-	"os"
+import "fmt"
 
-	"github.com/goark/gocli/rwi"
-	"github.com/spiegel-im-spiegel/philo/facade"
+// ECode is error codes for books-data
+type ECode int
+
+const (
+	ErrNullPointer ECode = iota + 1
+	ErrGoCommand
+	ErrNoCommand
 )
 
-func main() {
-	facade.Execute(
-		rwi.New(
-			rwi.WithReader(os.Stdin),
-			rwi.WithWriter(os.Stdout),
-			rwi.WithErrorWriter(os.Stderr),
-		),
-		os.Args[1:],
-	).Exit()
+var errMessages = map[ECode]string{
+	ErrNullPointer: "null reference instance",
+	ErrGoCommand:   "error in Go command",
+	ErrNoCommand:   "No command",
+}
+
+func (e ECode) Error() string {
+	if s, ok := errMessages[e]; ok {
+		return s
+	}
+	return fmt.Sprintf("unknown error (%d)", int(e))
 }
 
 /* MIT License

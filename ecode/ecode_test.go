@@ -1,21 +1,29 @@
-package main
+package ecode
 
 import (
-	"os"
-
-	"github.com/goark/gocli/rwi"
-	"github.com/spiegel-im-spiegel/philo/facade"
+	"fmt"
+	"testing"
 )
 
-func main() {
-	facade.Execute(
-		rwi.New(
-			rwi.WithReader(os.Stdin),
-			rwi.WithWriter(os.Stdout),
-			rwi.WithErrorWriter(os.Stderr),
-		),
-		os.Args[1:],
-	).Exit()
+func TestECodeError(t *testing.T) {
+	testCases := []struct {
+		err error
+		str string
+	}{
+		{err: ECode(0), str: "unknown error (0)"},
+		{err: ErrNullPointer, str: "null reference instance"},
+		{err: ErrGoCommand, str: "error in Go command"},
+		{err: ErrNoCommand, str: "No command"},
+		{err: ECode(4), str: "unknown error (4)"},
+	}
+
+	for _, tc := range testCases {
+		errStr := tc.err.Error()
+		if errStr != tc.str {
+			t.Errorf("\"%v\" != \"%v\"", errStr, tc.str)
+		}
+		fmt.Printf("Info(TestECodeError): %+v\n", tc.err)
+	}
 }
 
 /* MIT License
