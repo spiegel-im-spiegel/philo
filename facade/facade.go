@@ -31,6 +31,7 @@ func newRootCmd(ui *rwi.RWI, args []string) *cobra.Command {
 		},
 	}
 	rootCmd.SilenceUsage = true
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.SetArgs(args)            //arguments of command-line
 	rootCmd.SetIn(ui.Reader())       //Stdin
 	rootCmd.SetOut(ui.ErrorWriter()) //Stdout -> Stderr
