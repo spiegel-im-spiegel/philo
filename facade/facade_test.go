@@ -1,18 +1,40 @@
 package facade
 
 import (
+	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/goark/gocli/exitcode"
+	"github.com/goark/gocli/rwi"
 )
 
-func TestVersionNormal(t *testing.T) {
+// helper to build *rwi.RWI with separate out/err buffers
+func newTestUI() (*rwi.RWI, *bytes.Buffer, *bytes.Buffer) {
+	var outBuf, errBuf bytes.Buffer
+	ui := rwi.New(
+		rwi.WithReader(strings.NewReader("")),
+		rwi.WithWriter(&outBuf),
+		rwi.WithErrorWriter(&errBuf),
+	)
+	return ui, &outBuf, &errBuf
+}
+
+func TestExecute(t *testing.T) {
 	testCases := []struct {
 		args   []string
 		out    string
 		outErr string
 	}{
-		{args: []string{"version"}, out: "", outErr: "philo developer version\nrepository: https://github.com/spiegel-im-spiegel/philo\n"},
+		{args: []string{}, out: "Philosophers: 5, Die: 200ms, Eat: 20ms, Sleep: 80ms, Think: 80ms, Eat Count: 3\n", outErr: ""},
+		{args: []string{
+			"--philosophers", "7",
+			"-d", "300",
+			"-e", "25",
+			"-s", "90",
+			"-t", "100",
+			"-m", "5",
+		}, out: "Philosophers: 7, Die: 300ms, Eat: 25ms, Sleep: 90ms, Think: 100ms, Eat Count: 5\n", outErr: ""},
 	}
 
 	for _, tc := range testCases {

@@ -7,7 +7,6 @@ import (
 	"github.com/goark/gocli/exitcode"
 	"github.com/goark/gocli/rwi"
 	"github.com/spf13/cobra"
-	"github.com/spiegel-im-spiegel/philo/ecode"
 )
 
 var (
@@ -27,7 +26,11 @@ func newRootCmd(ui *rwi.RWI, args []string) *cobra.Command {
 		Short: "Simulation for philosophers' problem",
 		Long:  "Simulation for philosophers' problem.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return debugPrint(ui, errs.Wrap(ecode.ErrNoCommand))
+			prms, err := getParams(cmd)
+			if err != nil {
+				return debugPrint(ui, errs.Wrap(err))
+			}
+			return ui.Outputln(prms)
 		},
 	}
 	rootCmd.SilenceUsage = true
@@ -42,6 +45,12 @@ func newRootCmd(ui *rwi.RWI, args []string) *cobra.Command {
 
 	//global options
 	rootCmd.PersistentFlags().BoolVarP(&debugFlag, "debug", "", false, "for debug")
+	rootCmd.PersistentFlags().IntP("philosophers", "p", 5, "number of philosophers")
+	rootCmd.PersistentFlags().IntP("to-die", "d", 200, "time to die (ms)")
+	rootCmd.PersistentFlags().IntP("to-eat", "e", 20, "time to eat (ms)")
+	rootCmd.PersistentFlags().IntP("to-sleep", "s", 80, "time to sleep (ms)")
+	rootCmd.PersistentFlags().IntP("to-think", "t", 80, "time to think (ms)")
+	rootCmd.PersistentFlags().IntP("must-eat", "m", 3, "number of times each philosopher must eat")
 
 	return rootCmd
 }

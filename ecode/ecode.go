@@ -9,12 +9,14 @@ const (
 	ErrNullPointer ECode = iota + 1
 	ErrGoCommand
 	ErrNoCommand
+	ErrInvalidParameter
 )
 
 var errMessages = map[ECode]string{
-	ErrNullPointer: "null reference instance",
-	ErrGoCommand:   "error in Go command",
-	ErrNoCommand:   "No command",
+	ErrNullPointer:      "null reference instance",
+	ErrGoCommand:        "error in Go command",
+	ErrNoCommand:        "no command",
+	ErrInvalidParameter: "invalid parameter",
 }
 
 func (e ECode) Error() string {

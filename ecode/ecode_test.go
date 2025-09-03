@@ -13,8 +13,9 @@ func TestECodeError(t *testing.T) {
 		{err: ECode(0), str: "unknown error (0)"},
 		{err: ErrNullPointer, str: "null reference instance"},
 		{err: ErrGoCommand, str: "error in Go command"},
-		{err: ErrNoCommand, str: "No command"},
-		{err: ECode(4), str: "unknown error (4)"},
+		{err: ErrNoCommand, str: "no command"},
+		{err: ErrInvalidParameter, str: "invalid parameter"},
+		{err: ECode(5), str: "unknown error (5)"},
 	}
 
 	for _, tc := range testCases {
